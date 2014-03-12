@@ -1,0 +1,50 @@
+beam1Block + beam2Blocks_right
+beam2Blocks + beam1Block_right
+beam3Blocks
+beam3Blocks_right
+
+one function + variable pair for every floor, four in total
+difference between them is the y location
+
+need to create a loop inside the functions which creates empty objects at the locations that the floors are currently being drawn
+
+var firstFloor = {
+x: 0,
+y: (orangeWall.height) + Math.abs(vx)
+}
+
+var secondFloor = {
+x: 0,
+y: -(floorImage.height) + Math.abs(vx)
+}
+
+var thirdFloor = {
+x: 0,
+y: -((orangeWall.height + (floorImage.height * 2) - Math.abs(vx)))
+}
+
+var fourthFloor = {
+x: 0,
+y: -((redWall.height + orangeWall.height + (floorImage.height * 3) - Math.abs(vx)))
+}
+
+function floor1 {
+for (i=0;i<score?;i++) {
+var floorSwitcher = Math.floor(Math.random()*4)
+	switch(floorSwitcher){
+		case 1: 
+			ctx.drawImage(beam1Block, firstFloor.x, firstFloor.y);
+			ctx.drawImage(beam2Blocks_right, firstFloor.x + beam2Blocks.width, firstFloor.y);
+		case 2:
+			ctx.drawImage(beam2Blocks, firstFloor.x, firstFloor.y);
+			ctx.drawImage(beam1Block_right, firstFloor.x + beam3Blocks.width, firstFloor.y);
+		case 3: 
+			ctx.drawImage(beam3Blocks, firstFloor.x, firstFloor.y);
+			ctx.drawImage(beam0Blocks, firstFloor.x + beam.width-1, firstFloor.y);
+		case 4: 
+			ctx.drawImage(beam0Blocks, firstFloor.x, firstFloor.y);
+			ctx.drawImage(beam3Blocks_right, firstFloor.x + beam1Block.width, firstFloor.y);
+	}
+}
+
+
