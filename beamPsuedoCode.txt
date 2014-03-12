@@ -10,24 +10,34 @@ need to create a loop inside the functions which creates empty objects at the lo
 
 NOTE: the following code is randomizing the images ONLY.  There is no empty object for the second image of a floor in this code, thus no collision tracking.  Simply a proof of concept.
 
+var wall = {
+height: ,
+width: ,
+}
+
+var floor = {
+height: ,
+width: , 
+}
+
 var firstFloor = {
 x: 0,
-y: (orangeWall.height) + Math.abs(vx)
+y: (wall.height) + Math.abs(vx)
 }
 
 var secondFloor = {
 x: 0,
-y: -(floorImage.height) + Math.abs(vx)
+y: -(floor.height) + Math.abs(vx)
 }
 
 var thirdFloor = {
 x: 0,
-y: -((orangeWall.height + (floorImage.height * 2) - Math.abs(vx)))
+y: -((wall.height + (floor.height * 2) - Math.abs(vx)))
 }
 
 var fourthFloor = {
 x: 0,
-y: -((redWall.height + orangeWall.height + (floorImage.height * 3) - Math.abs(vx)))
+y: -(((wall.height * 2) + (floorImage.height * 3) - Math.abs(vx)))
 }
 
 function floor1 {
