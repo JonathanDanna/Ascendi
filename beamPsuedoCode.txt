@@ -8,6 +8,8 @@ difference between them is the y location
 
 need to create a loop inside the functions which creates empty objects at the locations that the floors are currently being drawn
 
+NOTE: the following code is randomizing the images ONLY.  There is no empty object for the second image of a floor in this code, thus no collision tracking.  Simply a proof of concept.
+
 var firstFloor = {
 x: 0,
 y: (orangeWall.height) + Math.abs(vx)
