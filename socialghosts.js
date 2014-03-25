@@ -1,5 +1,3 @@
-/*jslint browser:true */
-
 var canvas = document.querySelector('canvas');
 var ctx = canvas.getContext('2d');
 
@@ -17,33 +15,67 @@ var score1 = 0;
 var score2 = 0;
 var score3 = 0;
 var scoreCounter = 0;
-
-// score
-var score = 0;
 var scoreIncrement = 0.01;
 
+// score
+score = 0;
+
 //object images
-var wallYellow = new Image();
-wallYellow.src = 'http://thisiswhereiputmystuff.com/jonathan/GhostGame/wall1.png';
-var wallRedBrick = new Image();
-wallRedBrick.src = 'http://thisiswhereiputmystuff.com/jonathan/GhostGame/wall2.png';
-var wallGray = new Image();
-wallGray.src = 'http://thisiswhereiputmystuff.com/jonathan/GhostGame/wall3.png';
+var orangeWall = new Image();
+orangeWall.src = 'http://thisiswhereiputmystuff.com/jonathan/GhostGame/wall1.png';
+var redWall = new Image();
+redWall.src = 'http://thisiswhereiputmystuff.com/jonathan/GhostGame/wall2.png';
+var grayWall = new Image();
+grayWall.src = 'http://thisiswhereiputmystuff.com/jonathan/GhostGame/wall3.png';
+
+
 var floorImage = new Image();
-floorImage.src = 'http://thisiswhereiputmystuff.com/jonathan/GhostGame/beam.png';
+floorImage.src = floorImageRand();
+var floor1Image = new Image();
+floor1Image.src = floorImageRand();
+var floor2Image = new Image();
+floor2Image.src = floorImageRand();
+var floor3Image = new Image();
+floor3Image.src = floorImageRand();
+
 var ghostImage = new Image();
 ghostImage.src = 'http://thisiswhereiputmystuff.com/jonathan/GhostGame/Ghost.png';
 var vignette = new Image();
 vignette.src = 'http://thisiswhereiputmystuff.com/jonathan/GhostGame/vignette.png';
 var startImage = new Image();
 startImage.src = 'http://thisiswhereiputmystuff.com/jonathan/GhostGame/StartButton.png';
+var chairImage = new Image();
+chairImage.src = 'http://thisiswhereiputmystuff.com/jonathan/GhostGame/chair.png';
+var gooImage = new Image();
+gooImage.src = 'http://thisiswhereiputmystuff.com/jonathan/GhostGame/ghostGoo.png';
 
 //empty objects, you draw an image on their position
 var ghost = {
     speed: 5,
     x: W / 2,
-    y: H / 2
+    y: H / 2,
 };
+
+function floorImageRand() {
+    var floorSwitcher = Math.floor(Math.random() * 5);
+    var newFloorImage;
+    switch (floorSwitcher) {
+    case 1:
+        newFloorImage = 'http://thisiswhereiputmystuff.com/jonathan/GhostGame/beam1Block.png';
+        break;
+    case 2:
+        newFloorImage = 'http://thisiswhereiputmystuff.com/jonathan/GhostGame/beam2Blocks.png';
+        break;
+    case 3:
+        newFloorImage = 'http://thisiswhereiputmystuff.com/jonathan/GhostGame/beam3Blocks.png';
+        break;
+    case 4:
+        newFloorImage = 'http://thisiswhereiputmystuff.com/jonathan/GhostGame/beam.png';
+        break;
+    }
+    return newFloorImage;
+}
+
 
 //movement listeners
 var keysDown = {};
@@ -53,19 +85,6 @@ window.addEventListener('keydown', function (e) {
 window.addEventListener('keyup', function (e) {
     delete keysDown[e.keyCode];
 });
-
-function newRound() {
-    if (gameState != "play") {
-        document.getElementById("canvas").addEventListener("click", function () {
-            gameState = "play";
-            ghost.x = W / 2;
-            ghost.y = H / 2;
-            score = 0;
-        }, false);
-    }
-}
-
-
 
 
 function update() {
@@ -92,20 +111,19 @@ function update() {
 }
 
 function render() {
-    window.requestAnimationFrame(render);
 
     if (gameState == "start") {
         var startButton = {
             width: 100,
             height: 50,
             x: 100,
-            y: 480
-        };
+            y: 480,
+        }
 
         ctx.clearRect(0, 0, W, H);
-        ctx.drawImage(wallGray, 0, ((wallYellow.height) + floorImage.height));
-        ctx.drawImage(floorImage, 0, (wallYellow.height));
-        ctx.drawImage(wallYellow, 0, 0);
+        ctx.drawImage(grayWall, 0, ((orangeWall.height) + floorImage.height));
+        ctx.drawImage(floor1Image, 0, (orangeWall.height));
+        ctx.drawImage(orangeWall, 0, 0);
         ctx.drawImage(startImage, startButton.x, startButton.y);
         ctx.drawImage(vignette, 0, 0);
 
@@ -118,17 +136,48 @@ function render() {
     if (gameState == "play") {
         ctx.clearRect(0, 0, W, H);
         ctx.fillRect(0, 0, 600, 700);
+
+        var wall = {
+            height: 450,
+            width: 600
+        }
+
+        var floor = {
+            height: 38,
+            width: 600
+        }
+
+        var firstFloor = {
+            x: 0,
+            y: (wall.height) + Math.abs(vx)
+        }
+
+        var secondFloor = {
+            x: 0,
+            y: -(floor.height) + Math.abs(vx)
+        }
+
+        var thirdFloor = {
+            x: 0,
+            y: -((wall.height + (floor.height * 2) - Math.abs(vx)))
+        }
+
+        var fourthFloor = {
+            x: 0,
+            y: -(((wall.height * 2) + (floor.height * 3) - Math.abs(vx)))
+        }
+
         //pre-render before new walls
-        ctx.drawImage(wallGray, 0, ((wallYellow.height) + floorImage.height) + Math.abs(vx));
-        ctx.drawImage(floorImage, 0, (wallYellow.height) + Math.abs(vx));
+        ctx.drawImage(grayWall, 0, ((orangeWall.height) + floorImage.height) + Math.abs(vx));
+        ctx.drawImage(floor1Image, 0, firstFloor.y);
         //start new walls
-        ctx.drawImage(wallYellow, 0, -vx);
-        ctx.drawImage(floorImage, 0, -(floorImage.height) + Math.abs(vx));
-        ctx.drawImage(wallRedBrick, 0, -((wallYellow.height + floorImage.height) - Math.abs(vx)));
-        ctx.drawImage(floorImage, 0, -((wallYellow.height + (floorImage.height * 2) - Math.abs(vx))));
-        ctx.drawImage(wallGray, 0, -((wallRedBrick.height * 2) + (floorImage.height * 2) - Math.abs(vx)));
-        ctx.drawImage(floorImage, 0, -((wallRedBrick.height + img.height + (floorImage.height * 3) - Math.abs(vx))));
-        ctx.drawImage(wallYellow, 0, -((wallGray.height * 3) + (floorImage.height * 3) - Math.abs(vx)));
+        ctx.drawImage(orangeWall, 0, -vx);;
+        ctx.drawImage(floor2Image, 0, secondFloor.y);
+        ctx.drawImage(redWall, 0, -((orangeWall.height + floorImage.height) - Math.abs(vx)));
+        ctx.drawImage(floor3Image, 0, thirdFloor.y);
+        ctx.drawImage(grayWall, 0, -((redWall.height * 2) + (floorImage.height * 2) - Math.abs(vx)));
+        ctx.drawImage(floor1Image, 0, fourthFloor.y);
+        ctx.drawImage(orangeWall, 0, -((grayWall.height * 3) + (floorImage.height * 3) - Math.abs(vx)));
 
         //drawing an image at the location of empty object "ghost"
         ctx.drawImage(ghostImage, ghost.x, ghost.y);
@@ -140,6 +189,10 @@ function render() {
 
         //draw the vignette.  do this last so it appears on top!
         ctx.drawImage(vignette, 0, 0);
+
+        if (Math.abs(vx) > ((orangeWall.height * 3) + (floorImage.height * 3))) {
+            vx = 0;
+        }
 
         vx -= Math.round(score) / 2;
         newGhostSpeed = Math.round(score) / 2;
@@ -180,13 +233,12 @@ function render() {
             }
         }
     }
-    }
 
     if (gameState == "lose") {
         ctx.clearRect(0, 0, W, H);
-        ctx.drawImage(wallGray, 0, ((wallYellow.height) + floorImage.height));
-        ctx.drawImage(floorImage, 0, (wallYellow.height));
-        ctx.drawImage(wallYellow, 0, 0);
+        ctx.drawImage(grayWall, 0, ((orangeWall.height) + floorImage.height));
+        ctx.drawImage(floorImage, 0, (orangeWall.height));
+        ctx.drawImage(orangeWall, 0, 0);
         ctx.drawImage(vignette, 0, 0);
 
 
@@ -210,6 +262,8 @@ function render() {
             newRound();
         }
 
+
+
         ctx.font = '25pt Helvetica';
         ctx.fillStyle = '#FFF';
         ctx.fillText("Score 1:  " + Math.round(score1), (W / 3), 100);
@@ -218,3 +272,24 @@ function render() {
     }
 }
 
+function newRound() {
+    if (gameState != "play") {
+        document.getElementById("canvas").addEventListener("click", function () {
+            gameState = "play";
+            ghost.x = W / 2;
+            ghost.y = H / 2;
+            score = 0;
+            vx = 0;
+        }, false);
+    }
+}
+
+
+function run() {
+    update((Date.now() - time) / 1000);
+    render((Date.now() - time) / 1000);
+    time = Date.now();
+}
+
+var time = Date.now();
+setInterval(run, 10);
