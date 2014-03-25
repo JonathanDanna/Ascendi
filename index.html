@@ -40,20 +40,17 @@
         redWall.src = 'http://thisiswhereiputmystuff.com/jonathan/GhostGame/wall2.png';
         var grayWall = new Image();
         grayWall.src = 'http://thisiswhereiputmystuff.com/jonathan/GhostGame/wall3.png';
+
+
         var floorImage = new Image();
-        floorImage.src = 'http://thisiswhereiputmystuff.com/jonathan/GhostGame/beam.png';
-        var beam1Block = new Image();
-        beam1Block.src = 'http://thisiswhereiputmystuff.com/jonathan/GhostGame/beam1Block.png';
-        var beam1Block_right = new Image();
-        beam1Block_right.src = 'http://thisiswhereiputmystuff.com/jonathan/GhostGame/beam1Block_right.png';
-        var beam2Blocks = new Image();
-        beam2Blocks.src = 'http://thisiswhereiputmystuff.com/jonathan/GhostGame/beam2Blocks.png';
-        var beam2Blocks_right = new Image();
-        beam2Blocks_right.src = 'http://thisiswhereiputmystuff.com/jonathan/GhostGame/beam2Blocks_right.png';
-        var beam3Blocks = new Image();
-        beam3Blocks.src = 'http://thisiswhereiputmystuff.com/jonathan/GhostGame/beam3Blocks.png';
-        var beam3Blocks_right = new Image();
-        beam3Blocks_right.src = 'http://thisiswhereiputmystuff.com/jonathan/GhostGame/beam3Blocks_right.png';
+        floorImage.src = floorImageRand();
+        var floor1Image = new Image();
+        floor1Image.src = floorImageRand();
+        var floor2Image = new Image();
+        floor2Image.src = floorImageRand();
+        var floor3Image = new Image();
+        floor3Image.src = floorImageRand();
+
         var ghostImage = new Image();
         ghostImage.src = 'http://thisiswhereiputmystuff.com/jonathan/GhostGame/Ghost.png';
         var vignette = new Image();
@@ -71,6 +68,27 @@
             x: W / 2,
             y: H / 2,
         };
+
+        function floorImageRand() {
+            var floorSwitcher = Math.floor(Math.random() * 5);
+            var newFloorImage;
+            switch (floorSwitcher) {
+                case 1:
+                    newFloorImage = 'http://thisiswhereiputmystuff.com/jonathan/GhostGame/beam1Block.png';
+                    break;
+                case 2:
+                    newFloorImage = 'http://thisiswhereiputmystuff.com/jonathan/GhostGame/beam2Blocks.png';
+                    break;
+                case 3:
+                    newFloorImage = 'http://thisiswhereiputmystuff.com/jonathan/GhostGame/beam3Blocks.png';
+                    break;
+                case 4:
+                    newFloorImage = 'http://thisiswhereiputmystuff.com/jonathan/GhostGame/beam.png';
+                    break;
+            }
+            return newFloorImage;
+        }
+
 
          //movement listeners
         var keysDown = {};
@@ -117,7 +135,7 @@
 
                 ctx.clearRect(0, 0, W, H);
                 ctx.drawImage(grayWall, 0, ((orangeWall.height) + floorImage.height));
-                ctx.drawImage(floorImage, 0, (orangeWall.height));
+                ctx.drawImage(floor1Image, 0, (orangeWall.height));
                 ctx.drawImage(orangeWall, 0, 0);
                 ctx.drawImage(startImage, startButton.x, startButton.y);
                 ctx.drawImage(vignette, 0, 0);
@@ -131,16 +149,47 @@
             if (gameState == "play") {
                 ctx.clearRect(0, 0, W, H);
                 ctx.fillRect(0, 0, 600, 700);
+
+                var wall = {
+                    height: 450,
+                    width: 600
+                }
+
+                var floor = {
+                    height: 38,
+                    width: 600
+                }
+
+                var firstFloor = {
+                    x: 0,
+                    y: (wall.height) + Math.abs(vx)
+                }
+
+                var secondFloor = {
+                    x: 0,
+                    y: -(floor.height) + Math.abs(vx)
+                }
+
+                var thirdFloor = {
+                    x: 0,
+                    y: -((wall.height + (floor.height * 2) - Math.abs(vx)))
+                }
+
+                var fourthFloor = {
+                    x: 0,
+                    y: -(((wall.height * 2) + (floor.height * 3) - Math.abs(vx)))
+                }
+
                 //pre-render before new walls
                 ctx.drawImage(grayWall, 0, ((orangeWall.height) + floorImage.height) + Math.abs(vx));
-                ctx.drawImage(floorImage, 0, (orangeWall.height) + Math.abs(vx));
+                ctx.drawImage(floor1Image, 0, firstFloor.y);
                 //start new walls
-                ctx.drawImage(orangeWall, 0, -vx);
-                ctx.drawImage(floorImage, 0, -(floorImage.height) + Math.abs(vx));
+                ctx.drawImage(orangeWall, 0, -vx);;
+                ctx.drawImage(floor2Image, 0, secondFloor.y);
                 ctx.drawImage(redWall, 0, -((orangeWall.height + floorImage.height) - Math.abs(vx)));
-                ctx.drawImage(floorImage, 0, -((orangeWall.height + (floorImage.height * 2) - Math.abs(vx))));
+                ctx.drawImage(floor3Image, 0, thirdFloor.y);
                 ctx.drawImage(grayWall, 0, -((redWall.height * 2) + (floorImage.height * 2) - Math.abs(vx)));
-                ctx.drawImage(floorImage, 0, -((redWall.height + orangeWall.height + (floorImage.height * 3) - Math.abs(vx))));
+                ctx.drawImage(floor1Image, 0, fourthFloor.y);
                 ctx.drawImage(orangeWall, 0, -((grayWall.height * 3) + (floorImage.height * 3) - Math.abs(vx)));
 
                 //drawing an image at the location of empty object "ghost"
@@ -247,7 +296,7 @@
                 }, false);
             }
         }
-        
+
 
         function run() {
             update((Date.now() - time) / 1000);
