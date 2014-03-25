@@ -105,8 +105,7 @@
             }
         }
 
-        (function render() {
-            window.requestAnimationFrame(render);
+        function render() {
 
             if (gameState == "start") {
                 var startButton = {
@@ -235,7 +234,7 @@
                 ctx.fillText("Score 2:  " + Math.round(score2), (W / 3), 200);
                 ctx.fillText("Score 3:  " + Math.round(score3), (W / 3), 300);
             }
-        }());
+        }
 
         function newRound() {
             if (gameState != "play") {
@@ -244,6 +243,7 @@
                     ghost.x = W / 2;
                     ghost.y = H / 2;
                     score = 0;
+                    vx = 0;
                 }, false);
             }
         }
@@ -251,6 +251,7 @@
 
         function run() {
             update((Date.now() - time) / 1000);
+            render((Date.now() - time) / 1000);
             time = Date.now();
         }
 
