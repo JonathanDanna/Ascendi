@@ -180,9 +180,6 @@
                 ctx.clearRect(0, 0, W, H);
                 ctx.fillRect(0, 0, 600, 700);
                 
-                var switched = false;
-
-
                 //pre-render before new walls
                 ctx.drawImage(grayWall, 0, ((orangeWall.height) + floorImage.height) + Math.abs(vx));
                 ctx.drawImage(floor1Image, 0, firstFloor.y);
@@ -195,7 +192,6 @@
                 ctx.drawImage(floor1Image, 0, fourthFloor.y);
                 ctx.drawImage(orangeWall, 0, -((grayWall.height * 3) + (floorImage.height * 3) - Math.abs(vx)));
 
-                
 
                 //drawing an image at the location of empty object "ghost"
                 ctx.drawImage(ghostImage, ghost.x, ghost.y);
@@ -208,11 +204,11 @@
                 //draw the vignette.  do this last so it appears on top!
                 ctx.drawImage(vignette, 0, 0);
 
-                if (Math.abs(vx) > ((orangeWall.height * 3) + (floorImage.height * 3))) {
+                if (Math.abs(vx) > ((wall.height * 3) + (floor.height * 3))) {
                     vx = 0;
-                    floor1Image.src = floorImageRand();
-                    floor2Image.src = floorImageRand();
+                    
                     floor3Image.src = floorImageRand();
+                    ctx.drawImage(floor3Image, 0, thirdFloor.y);
                 }
 
                 vx -= Math.round(score) / 2;
