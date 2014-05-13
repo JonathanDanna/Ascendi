@@ -143,8 +143,8 @@ $(document).ready(function () {
             ctx.font = 'bold 30px helvetica';
             ctx.fillText('ENTER or SPACE to start', (canW / 5), (canH - 160));
             ctx.strokeText('ENTER or SPACE to start', (canW / 5), (canH - 160));
-            ctx.fillText('WASD or ARROW KEYS to move', (canW / 8), (canH - 100));
-            ctx.strokeText('WASD or ARROW KEYS to move', (canW / 8), (canH - 100));
+            ctx.fillText('WASD to move', (canW / 3), (canH - 100));
+            ctx.strokeText('WASD to move', (canW / 3), (canH - 100));
             //ctx.drawImage(startImage, startButton.x, startButton.y);
             ctx.drawImage(vignette, 0, 0);
 
